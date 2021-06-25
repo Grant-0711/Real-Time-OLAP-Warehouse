@@ -38,6 +38,9 @@ public class DWDLogApp  extends BaseAppV1{
 
     @Override
     public void run(StreamExecutionEnvironment env, DataStreamSource<String> sourceStream) {
+
+
+
         sourceStream.print();
     }
 }
