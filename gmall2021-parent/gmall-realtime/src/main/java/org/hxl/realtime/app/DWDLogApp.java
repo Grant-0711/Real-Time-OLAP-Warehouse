@@ -16,7 +16,6 @@ import org.apache.flink.streaming.api.windowing.assigners.TumblingEventTimeWindo
 import org.apache.flink.streaming.api.windowing.time.Time;
 import org.apache.flink.streaming.api.windowing.windows.TimeWindow;
 import org.apache.flink.util.Collector;
-import org.hxl.realtime.bean.CommonUtil;
 import org.hxl.realtime.common.Constant;
 import java.util.Comparator;
 import org.apache.flink.api.common.eventtime.WatermarkStrategy;
@@ -75,7 +74,7 @@ public class DWDLogApp extends BaseAppV1 {
                     @Override
                     public void open(Configuration parameters) throws Exception {
                         firstVisitState = getRuntimeContext()
-                                .getState(new ValueStateDescriptor<Long>("firstVisitState", Long.class));
+                                .getState(new ValueStateDescriptor<>("firstVisitState", Long.class));
                     }
 
                     @Override

@@ -1,13 +1,12 @@
-package org.hxl.realtime.bean;
-
-import java.util.ArrayList;
-import java.util.List;
-
+package org.hxl.realtime.util;
 
 /**
  * @author Grant
- * @create 2021-06-26 4:57
+ * @create 2021-06-28 5:23
  */
+import java.util.ArrayList;
+import java.util.List;
+
 public class CommonUtil {
 
     public static <T> List<T> toList(Iterable<T> it) {
