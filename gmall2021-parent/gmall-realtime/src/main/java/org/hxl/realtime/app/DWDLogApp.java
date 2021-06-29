@@ -30,6 +30,7 @@ import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
 import java.time.Duration;
 import java.util.List;
 import org.apache.flink.util.OutputTag;
+import org.hxl.realtime.util.CommonUtil;
 import org.hxl.realtime.util.FlinkSinkUtil;
 
 

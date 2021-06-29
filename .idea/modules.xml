@@ -3,6 +3,7 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/.idea/Real-Time-OLAP-Warehouse.iml" filepath="$PROJECT_DIR$/.idea/Real-Time-OLAP-Warehouse.iml" />
+      <module fileurl="file://$PROJECT_DIR$/gmall2021-parent/gmall-logger/gmall-logger.iml" filepath="$PROJECT_DIR$/gmall2021-parent/gmall-logger/gmall-logger.iml" />
       <module fileurl="file://$PROJECT_DIR$/gmall2021-parent/gmall-realtime/gmall-realtime.iml" filepath="$PROJECT_DIR$/gmall2021-parent/gmall-realtime/gmall-realtime.iml" />
       <module fileurl="file://$PROJECT_DIR$/gmall2021-parent/gmall2021-parent.iml" filepath="$PROJECT_DIR$/gmall2021-parent/gmall2021-parent.iml" />
     </modules>

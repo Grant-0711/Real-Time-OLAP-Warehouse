@@ -4,6 +4,7 @@
     <option name="originalFiles">
       <list>
         <option value="$PROJECT_DIR$/gmall2021-parent/pom.xml" />
+        <option value="$PROJECT_DIR$/gmall2021-parent/gmall-logger/pom.xml" />
       </list>
     </option>
   </component>
