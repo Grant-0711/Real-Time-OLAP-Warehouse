@@ -233,10 +233,10 @@ public class DwdDbApp extends BaseAppV1 {
                 "  PRIMARY KEY (`source_table`,`operate_type`) not enforced" +
                 ")with(" +
                 " 'connector' = 'mysql-cdc',\n" +
-                " 'hostname' = 'hadoop162',\n" +
+                " 'hostname' = 'hadoop107',\n" +
                 " 'port' = '3306',\n" +
                 " 'username' = 'root',\n" +
-                " 'password' = 'aaaaaa',\n" +
+                " 'password' = '123456',\n" +
                 " 'database-name' = 'gmall2021_realtime',\n" +
                 " 'table-name' = 'table_.*', " +
                 " 'debezium.snapshot.mode'='initial' " +
