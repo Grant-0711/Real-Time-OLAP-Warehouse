@@ -16,7 +16,6 @@ import org.apache.flink.streaming.api.windowing.assigners.TumblingEventTimeWindo
 import org.apache.flink.streaming.api.windowing.time.Time;
 import org.apache.flink.streaming.api.windowing.windows.TimeWindow;
 import org.apache.flink.util.Collector;
-import org.hxl.realtime.common.Constant;
 import java.util.Comparator;
 import org.apache.flink.api.common.eventtime.WatermarkStrategy;
 import org.apache.flink.api.common.state.ValueState;
@@ -32,15 +31,15 @@ import java.util.List;
 import org.apache.flink.util.OutputTag;
 import org.hxl.realtime.util.CommonUtil;
 import org.hxl.realtime.util.FlinkSinkUtil;
+import static org.hxl.realtime.common.Constant.*;
 
-
-public class DWDLogApp extends BaseAppV1 {
+public class DwdLogApp extends BaseAppV1 {
     public static void main(String[] args) {
-        new DWDLogApp().init(2001,
+        new DwdLogApp().init(2001,
                 2,
                 "DwdLogApp",
                 "DwdLogApp",
-                Constant.TOPIC_ODS_LOG);
+                TOPIC_ODS_LOG);
 
     }
 
@@ -54,7 +53,6 @@ public class DWDLogApp extends BaseAppV1 {
                 threeSteams = splitStream(validatedStream);
         //把不同流中的数据sink到不同的topic中，就得到了DWD层数据
         sendToKafka(threeSteams);
-
 
         sourceStream.print();
     }
@@ -159,15 +157,15 @@ public class DWDLogApp extends BaseAppV1 {
     private void sendToKafka(Tuple3<SingleOutputStreamOperator<JSONObject>, DataStream<JSONObject>, DataStream<JSONObject>> threeSteams) {
         threeSteams.f0
                 .map(JSONAware::toJSONString)
-                .addSink(FlinkSinkUtil.getKafkaSink(Constant.TOPIC_DWD_START_LOG));
+                .addSink(FlinkSinkUtil.getKafkaSink(TOPIC_DWD_START_LOG));
 
         threeSteams.f1
                 .map(JSONAware::toJSONString)
-                .addSink(FlinkSinkUtil.getKafkaSink(Constant.TOPIC_DWD_PAGE_LOG));
+                .addSink(FlinkSinkUtil.getKafkaSink(TOPIC_DWD_PAGE_LOG));
 
         threeSteams.f2
                 .map(JSONAware::toJSONString)
-                .addSink(FlinkSinkUtil.getKafkaSink(Constant.TOPIC_DWD_DISPLAY_LOG));
+                .addSink(FlinkSinkUtil.getKafkaSink(TOPIC_DWD_DISPLAY_LOG));
 
 
     }

@@ -29,7 +29,7 @@ public abstract class BaseAppV1 {
 
         // 设置状态后端
         env.setStateBackend(new HashMapStateBackend());
-        env.getCheckpointConfig().setCheckpointStorage("hdfs://8.134.105.70:9820/flink-realtime/ck/" + ck);
+        env.getCheckpointConfig().setCheckpointStorage("hdfs://hadoop107:9820/flink-realtime/ck/" + ck);
 
         env.enableCheckpointing(3000, CheckpointingMode.EXACTLY_ONCE);
 

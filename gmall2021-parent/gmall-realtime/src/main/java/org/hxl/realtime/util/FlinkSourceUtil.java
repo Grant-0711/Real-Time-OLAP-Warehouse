@@ -12,7 +12,7 @@ import java.util.Properties;
 public class FlinkSourceUtil {
     public static FlinkKafkaConsumer<String> getKafkaSource(String groupId, String topic){
         Properties props = new Properties();
-        props.setProperty("bootstrap.servers", "8.134.105.70:9092,8.134.106.107:9092,8.134.104.237:9092");
+        props.setProperty("bootstrap.servers", "hadoop107:9092,hadoop108:9092,hadoop109:9092");
         props.setProperty("group.id", groupId);
         props.setProperty("auto.offset.reset", "latest");
         props.setProperty("isolation.level", "read_committed");
