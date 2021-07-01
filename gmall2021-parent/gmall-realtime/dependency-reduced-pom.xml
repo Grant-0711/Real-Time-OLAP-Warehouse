@@ -24,6 +24,7 @@
                   <exclude>com.google.code.findbugs:jsr305</exclude>
                   <exclude>org.slf4j:*</exclude>
                   <exclude>log4j:*</exclude>
+                  <exclude>org.apache.hadoop:*</exclude>
                 </excludes>
               </artifactSet>
               <filters>
@@ -118,18 +119,6 @@
       <artifactId>flink-streaming-scala_2.12</artifactId>
       <version>1.13.1</version>
       <scope>provided</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.apache.phoenix</groupId>
-      <artifactId>phoenix-core</artifactId>
-      <version>5.0.0-HBase-2.0</version>
-      <scope>provided</scope>
-      <exclusions>
-        <exclusion>
-          <artifactId>javax.el</artifactId>
-          <groupId>org.glassfish</groupId>
-        </exclusion>
-      </exclusions>
     </dependency>
   </dependencies>
   <properties>

@@ -1,4 +1,4 @@
-package org.hxl.realtime.app;
+package org.hxl.realtime.app.dwd;
 
 /**
  * @author Grant

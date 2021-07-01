@@ -1,4 +1,4 @@
-package org.hxl.realtime.app;
+package org.hxl.realtime.app.dwm;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
@@ -13,7 +13,7 @@ import org.apache.flink.streaming.api.windowing.assigners.TumblingEventTimeWindo
 import org.apache.flink.streaming.api.windowing.time.Time;
 import org.apache.flink.streaming.api.windowing.windows.TimeWindow;
 import org.apache.flink.util.Collector;
-import org.hxl.realtime.common.Constant.*;
+import org.hxl.realtime.app.BaseAppV1;
 import org.hxl.realtime.util.CommonUtil;
 
 import java.text.SimpleDateFormat;

@@ -1,4 +1,4 @@
-package org.hxl.realtime.app;
+package org.hxl.realtime.app.dwd;
 
 /**
  * @author Grant
@@ -29,6 +29,7 @@ import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
 import java.time.Duration;
 import java.util.List;
 import org.apache.flink.util.OutputTag;
+import org.hxl.realtime.app.BaseAppV1;
 import org.hxl.realtime.util.CommonUtil;
 import org.hxl.realtime.util.FlinkSinkUtil;
 import static org.hxl.realtime.common.Constant.*;
