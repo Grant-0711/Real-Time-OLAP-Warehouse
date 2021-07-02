@@ -43,7 +43,8 @@ public class DwdDbApp extends BaseAppV1 {
         // 3. 把这两个流connect到一起
         SingleOutputStreamOperator<Tuple2<JSONObject, TableProcess>> dataTpStream = connectStreams(tpStream, etledDataStream);
         // 4. 进行动态分流
-        Tuple2<SingleOutputStreamOperator<Tuple2<JSONObject, TableProcess>>, DataStream<Tuple2<JSONObject, TableProcess>>> kafkaAndHbaseStreams = dynamicStream(dataTpStream);
+        Tuple2<SingleOutputStreamOperator<Tuple2<JSONObject, TableProcess>>, DataStream<Tuple2<JSONObject, TableProcess>>> kafkaAndHbaseStreams
+                = dynamicStream(dataTpStream);
         // 5. 事实表数据写入到Kafka
         sendToKafka(kafkaAndHbaseStreams.f0);
         // 5. 维度表数据写入到Hbase

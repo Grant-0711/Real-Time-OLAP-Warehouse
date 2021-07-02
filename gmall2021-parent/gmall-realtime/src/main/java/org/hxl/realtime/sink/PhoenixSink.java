@@ -7,6 +7,8 @@ import org.apache.flink.api.common.state.ValueStateDescriptor;
 import org.apache.flink.api.java.tuple.Tuple2;
 import org.apache.flink.configuration.Configuration;
 import org.apache.flink.streaming.api.functions.sink.RichSinkFunction;
+import org.hxl.realtime.util.RedisUtil;
+import redis.clients.jedis.Jedis;
 
 import java.io.IOException;
 import java.sql.Connection;
@@ -42,6 +44,19 @@ public class PhoenixSink extends RichSinkFunction<Tuple2<JSONObject, TableProces
         // 2.  把这条数据写入到Phoenix中
         write2Hbase(value);
 
+        // 3. dwm层需要的: 更新redis中的缓存
+        // 如果检测到这次是update操作, 则需要去缓存中更新对应的维度数据或者删除对应的数据
+        delCache(value);
+    }
+
+    private void delCache(Tuple2<JSONObject, TableProcess> value) {
+
+        String key = value.f1.getSinkTable().toUpperCase() + ":" + value.f0.get("id");
+
+        Jedis jedis = RedisUtil.getRedisClient();
+        jedis.select(1);
+        jedis.del(key);  // 如果key不存在, 会有啥影响?  没有影响. 所以不用提前判断key是否存在
+        jedis.close();  // 归还给连接池
     }
 
     private void write2Hbase(Tuple2<JSONObject, TableProcess> value) throws SQLException {
@@ -130,3 +145,4 @@ public class PhoenixSink extends RichSinkFunction<Tuple2<JSONObject, TableProces
         }
     }
 }
+
