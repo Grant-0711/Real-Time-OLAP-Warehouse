@@ -9,6 +9,8 @@ public class Constant {
     public static final String PHOENIX_URL = "jdbc:phoenix:hadoop107,hadoop108,hadoop109:2181";
     public static final String MYSQL_DRIVER = "com.mysql.jdbc.Driver";
     public static final String MYSQL_URL = "jdbc:mysql://hadoop107:3306/gmall2021?user=root&password=123456";
+    public static final String CLICKHOUSE_DRIVER = "ru.yandex.clickhouse.ClickHouseDriver";
+    public static final String CLICKHOUSE_URL_PRE = "jdbc:clickhouse://hadoop107:8123/";
 
 
     public static final String TOPIC_ODS_LOG = "ods_log";
@@ -20,6 +22,9 @@ public class Constant {
     public static final String TOPIC_DWM_USER_JUMP_DETAIL = "dwm_user_jump_detail";
     public static final String TOPIC_DWD_ORDER_INFO = "dwd_order_info";
     public static final String TOPIC_DWD_ORDER_DETAIL = "dwd_order_detail";
+    public static final String TOPIC_DWM_ORDER_WIDE = "dwm_order_wide";
+    public static final String TOPIC_DWM_PAYMENT_WIDE = "dwm_payment_wide";
+    public static final String TOPIC_DWD_PAYMENT_INFO = "dwd_payment_info";
 
     // phoenix中的维度表
     public static final String DIM_USER_INFO = "DIM_USER_INFO";
