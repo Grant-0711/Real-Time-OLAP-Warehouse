@@ -17,14 +17,21 @@ public class Constant {
     public static final String TOPIC_DWD_START_LOG = "dwd_start_log";
     public static final String TOPIC_DWD_PAGE_LOG = "dwd_page_log";
     public static final String TOPIC_DWD_DISPLAY_LOG = "dwd_display_log";
+
+    public static final String TOPIC_DWD_FAVOR_INFO = "dwd_favor_info";
+    public static final String TOPIC_DWD_CART_INFO = "dwd_cart_info";
+    public static final String TOPIC_DWD_ORDER_REFUND_INFO = "dwd_order_refund_info";
+    public static final String TOPIC_DWD_COMMENT_INFO = "dwd_comment_info";
+
+
     public static final String TOPIC_ODS_DB = "ods_db";
     public static final String TOPIC_DWM_UV = "dwm_uv";
     public static final String TOPIC_DWM_USER_JUMP_DETAIL = "dwm_user_jump_detail";
     public static final String TOPIC_DWD_ORDER_INFO = "dwd_order_info";
     public static final String TOPIC_DWD_ORDER_DETAIL = "dwd_order_detail";
+    public static final String TOPIC_DWD_PAYMENT_INFO = "dwd_payment_info";
     public static final String TOPIC_DWM_ORDER_WIDE = "dwm_order_wide";
     public static final String TOPIC_DWM_PAYMENT_WIDE = "dwm_payment_wide";
-    public static final String TOPIC_DWD_PAYMENT_INFO = "dwd_payment_info";
 
     // phoenix中的维度表
     public static final String DIM_USER_INFO = "DIM_USER_INFO";
@@ -35,6 +42,10 @@ public class Constant {
     public static final String DIM_BASE_CATEGORY3 = "DIM_BASE_CATEGORY3";
 
     public static final int DIM_EXPIRE_SECOND = 24 * 60 * 60;  // 维度数据在redis的过期时间默认是24小时
+
+
+    public static final String FIVE_START_GOOD_COMMENT="1205";
+    public static final String FOUR_START_GOOD_COMMENT="1204";
 
 
 }
