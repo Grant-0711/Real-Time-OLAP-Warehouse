@@ -32,6 +32,7 @@ public class Constant {
     public static final String TOPIC_DWD_PAYMENT_INFO = "dwd_payment_info";
     public static final String TOPIC_DWM_ORDER_WIDE = "dwm_order_wide";
     public static final String TOPIC_DWM_PAYMENT_WIDE = "dwm_payment_wide";
+    public static final String TOPIC_DWS_PRODUCT_STATS = "dws_product_stats";
 
     // phoenix中的维度表
     public static final String DIM_USER_INFO = "DIM_USER_INFO";
