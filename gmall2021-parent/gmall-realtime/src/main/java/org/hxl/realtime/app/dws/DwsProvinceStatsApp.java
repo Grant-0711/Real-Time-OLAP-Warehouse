@@ -1,6 +1,9 @@
 package org.hxl.realtime.app.dws;
 
+import org.apache.flink.api.java.tuple.Tuple2;
+import org.apache.flink.streaming.api.datastream.DataStream;
 import org.apache.flink.table.api.Table;
+import org.apache.flink.table.api.TableResult;
 import org.apache.flink.table.api.bridge.java.StreamTableEnvironment;
 import org.hxl.realtime.app.BaseSqlApp;
 import org.hxl.realtime.bean.ProvinceStats;
@@ -18,7 +21,7 @@ public class DwsProvinceStatsApp extends BaseSqlApp {
     @Override
     public void run(StreamTableEnvironment tEnv) {
         // 1. 建立一个动态表A, 与source关联(Kafka的topic)
-        tEnv.executeSql("create table order_wide(" +
+        TableResult tableResult = tEnv.executeSql("create table order_wide(" +
                 "   province_id bigint, " +
                 "   province_name string, " +
                 "   province_area_code string, " +
@@ -31,12 +34,14 @@ public class DwsProvinceStatsApp extends BaseSqlApp {
                 "   watermark for et as et - interval '5' second " +
                 ")with(" +
                 "   'connector' = 'kafka'," +
-                "   'properties.bootstrap.servers' = 'hadoop162:9092,hadoop163:9092,hadoop164:9092'," +
+                "   'properties.bootstrap.servers' = 'hadoop107:9092,hadoop108:9092,hadoop109:9092'," +
                 "   'properties.group.id' = 'DwsProvinceStatsApp'," +
                 "   'topic' = 'dwm_order_wide'," +
                 "   'scan.startup.mode' = 'latest-offset'," +
                 "   'format' = 'json'" +
                 ")");
+        //tEnv.sqlQuery("select * from order_wide").execute().print();
+        //tableResult.print();
         // 2. 建立一个动态表B 与sink关联(clickhouse中的table)
         /*tEnv.executeSql("create table province_stats_2021 (\n" +
                             "   stt string,\n" +
@@ -61,7 +66,7 @@ public class DwsProvinceStatsApp extends BaseSqlApp {
                             ")");*/
 
         // 3. 在这个动态A表上执行连续查询
-        Table resultTable = tEnv
+        Table sqlQuery = tEnv
                 .sqlQuery("select " +
                         " date_format(tumble_start(et, interval '5' second), 'yyyy-MM-dd HH:mm:ss') stt, " +
                         " date_format(tumble_end(et, interval '5' second), 'yyyy-MM-dd HH:mm:ss') edt, " +
@@ -82,14 +87,19 @@ public class DwsProvinceStatsApp extends BaseSqlApp {
                         " province_iso_code, " +
                         " province_3166_2_code");
 
-        // 4. 把上面连续查询的结果写入到动态表B中
-        //tEnv.executeSql("insert into province_stats_2021 select * from " + resultTable);
-        // 由于连接器与flink版本不兼容, 需要把动态表的数据转成流之后再写入
-        tEnv
-                .toRetractStream(resultTable, ProvinceStats.class)
-                .filter(t -> t.f0)  // 把撤回的过滤掉
+//         4. 把上面连续查询的结果写入到动态表B中
+        //         由于连接器与flink版本不兼容, 需要把动态表的数据转成流之后再写入
+    // tEnv.executeSql("insert into province_stats_2021 select * from " + sqlQuery);
+
+     DataStream<Tuple2<Boolean, ProvinceStats>> tuple2DataStream = tEnv
+              .toRetractStream(sqlQuery, ProvinceStats.class);
+       tuple2DataStream.print();
+       tuple2DataStream
+
+              .filter(t -> t.f0)  // 把撤回的过滤掉
                 .map(t-> t.f1)
-                .addSink(FlinkSinkUtil.getClickhouseSink("gmall2021", "province_stats_2021", ProvinceStats.class));
+
+              .addSink(FlinkSinkUtil.getClickhouseSink("gmall2021", "province_stats_2021", ProvinceStats.class));
 
 
     }
