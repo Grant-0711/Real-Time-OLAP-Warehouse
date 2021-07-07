@@ -50,6 +50,7 @@ public class DwmOrderWideApp_Cache_Async extends BaseAppV2 {
         SingleOutputStreamOperator<OrderWide> orderWideWithDim = dimJoin(orderWideStreamWithoutDims);
 
         // 3. 把OrderWide数据写入到kafka中
+        //orderWideStreamWithoutDims.print();
         sendToKafka(orderWideWithDim);
 
     }

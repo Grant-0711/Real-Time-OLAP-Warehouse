@@ -14,7 +14,9 @@ import org.apache.flink.streaming.api.windowing.time.Time;
 import org.apache.flink.streaming.api.windowing.windows.TimeWindow;
 import org.apache.flink.util.Collector;
 import org.hxl.realtime.app.BaseAppV1;
+import org.hxl.realtime.common.Constant;
 import org.hxl.realtime.util.CommonUtil;
+import org.hxl.realtime.util.FlinkSinkUtil;
 
 import java.text.SimpleDateFormat;
 import java.time.Duration;
@@ -32,54 +34,66 @@ import static org.hxl.realtime.common.Constant.TOPIC_DWD_PAGE_LOG;
 * 不是计算最终值，而是把每个用户的当前第一条访问记录写入dwm层
 * */
 public class DwmUvApp extends BaseAppV1 {
-    @Override
-    public void run(StreamExecutionEnvironment env, DataStreamSource<String> sourceStream) {
-            sourceStream
-                    .map(JSON::parseObject)
-                    .assignTimestampsAndWatermarks(
-                            WatermarkStrategy.
-                                    <JSONObject>forBoundedOutOfOrderness(Duration.ofSeconds(3))
-                            .withTimestampAssigner((obj,ts) -> obj.getLong("ts"))
-                    )
-                    .keyBy((obj -> obj.getJSONObject("common").getString("mid")))
-                    .window(TumblingEventTimeWindows.of(Time.seconds(5)))
-                    .process(new ProcessWindowFunction<JSONObject, JSONObject, String, TimeWindow>() {
-                        private ValueState<Long> firstVisitState;
-                        private SimpleDateFormat df;
-                        @Override
-                        public void open(Configuration parameters) {
-                            firstVisitState = getRuntimeContext()
-                                    .getState(new ValueStateDescriptor<>("firstVisitState", Long.class));
-
-                             df = new SimpleDateFormat("yyyy-MM-dd");
-                        }
-
-                        @Override
-                        public void process(String key, Context context, Iterable<JSONObject> elements, Collector<JSONObject> outer) throws Exception {
-                            //如果到了第二天，则首先清空状态
-                            //今天
-                            String today = df.format(context.window().getEnd());
-                            String last = df.format(firstVisitState.value() == null? 0L :firstVisitState);
-                            if (!today.equals(last)){
-                                firstVisitState.clear();
-                            }
-
-
-                            if (firstVisitState.value() == null){
-                                List<JSONObject> list = CommonUtil.toList(elements);
-                                JSONObject first = Collections.min(list, Comparator.comparing(o -> o.getLong("ts")));
-                                outer.collect(first);
-                                firstVisitState.update(first.getLong("ts"));
-                            }
-                        }
-                    })
-                    .print();
-
-
-
+    public static void main(String[] args) {
+        new DwmUvApp().init(3001, 2, "DwmUvApp", "DwmUvApp", Constant.TOPIC_DWD_PAGE_LOG);
     }
 
-    public static void main(String[] args) {
-        new DwmUvApp().init(3001,2,"DwmUvApp","DwmUvApp", TOPIC_DWD_PAGE_LOG);
+    @Override
+    public void run(StreamExecutionEnvironment env,
+                    DataStreamSource<String> sourceStream) {
+        // uv的计算:
+        sourceStream
+                .map(JSON::parseObject)
+                .assignTimestampsAndWatermarks(
+                        WatermarkStrategy
+                                .<JSONObject>forBoundedOutOfOrderness(Duration.ofSeconds(3))
+                                .withTimestampAssigner((obj, ts) -> obj.getLong("ts"))
+                )
+                .keyBy(obj -> obj.getJSONObject("common").getString("mid"))
+                .window(TumblingEventTimeWindows.of(Time.seconds(5)))
+                .process(new ProcessWindowFunction<JSONObject, JSONObject, String, TimeWindow>() {
+
+                    private SimpleDateFormat df;
+                    private ValueState<Long> firstVisitState;
+
+                    @Override
+                    public void open(Configuration parameters) throws Exception {
+                        firstVisitState = getRuntimeContext()
+                                .getState(new ValueStateDescriptor<Long>("firstVisitState", Long.class));
+
+                        df = new SimpleDateFormat("yyyy-MM-dd");
+                    }
+
+                    @Override
+                    public void process(String key,
+                                        Context ctx,
+                                        Iterable<JSONObject> elements,
+                                        Collector<JSONObject> out) throws Exception {
+                        // 如果到了第二天, 则应该首先清空状态
+                        // 今天
+                        String today = df.format(ctx.window().getEnd());
+                        String last = df.format(firstVisitState.value() == null ? 0L : firstVisitState.value());
+                        if (!today.equals(last)) {  // 证明天发生了变化
+                            firstVisitState.clear();
+                        }
+
+                        // 如果找到我们的第一条记录
+                        // 找到每天的第一个窗口的时间戳最小的那个数据
+                        if (firstVisitState.value() == null) {
+
+                            List<JSONObject> list = CommonUtil.toList(elements);
+                            //                        Collections.min(list, (o1, o2) -> o1.getLong("ts").compareTo(o2.getLong("ts")))
+                            JSONObject first = Collections.min(list, Comparator.comparing(o -> o.getLong("ts")));
+                            out.collect(first);
+                            firstVisitState.update(first.getLong("ts"));  // 更新第一条纪律的时间戳到状态中
+                        }
+                    }
+                })
+                .map(JSON::toString)
+                .addSink(FlinkSinkUtil.getKafkaSink(Constant.TOPIC_DWM_UV));
+
     }
 }
+/*
+这个uv不是计算最终的值, 而是把每个用户当前的第一条访问记录写入到DWM层(kafka)
+ */

@@ -48,6 +48,7 @@ public class DwdDbApp extends BaseAppV1 {
         // 5. 事实表数据写入到Kafka
         sendToKafka(kafkaAndHbaseStreams.f0);
         // 5. 维度表数据写入到Hbase
+        kafkaAndHbaseStreams.f1.print();
         sendToHbase(kafkaAndHbaseStreams.f1);
 
     }
