@@ -93,7 +93,7 @@ public class DwsProvinceStatsApp extends BaseSqlApp {
 
      DataStream<Tuple2<Boolean, ProvinceStats>> tuple2DataStream = tEnv
               .toRetractStream(sqlQuery, ProvinceStats.class);
-       tuple2DataStream.print();
+       //tuple2DataStream.print();
        tuple2DataStream
 
               .filter(t -> t.f0)  // 把撤回的过滤掉

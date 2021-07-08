@@ -8,13 +8,20 @@
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <module name="gmall-realtime" />
+        <module name="gmall-suger" />
         <module name="gmall-logger" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
       <module name="gmall-logger" target="1.8" />
       <module name="gmall-realtime" target="8" />
+      <module name="gmall-suger" target="1.8" />
       <module name="gmall2021-parent" target="1.5" />
     </bytecodeTargetLevel>
+  </component>
+  <component name="JavacSettings">
+    <option name="ADDITIONAL_OPTIONS_OVERRIDE">
+      <module name="gmall-suger" options="-parameters" />
+    </option>
   </component>
 </project>
