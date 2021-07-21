@@ -17,7 +17,7 @@ public class FlinkSourceUtil {
         props.setProperty("auto.offset.reset", "latest");
         props.setProperty("isolation.level", "read_committed");
 
-        return new FlinkKafkaConsumer<String>(
+        return new FlinkKafkaConsumer<>(
                 topic,
                 new SimpleStringSchema(),
                 props
