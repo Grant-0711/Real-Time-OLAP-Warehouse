@@ -13,9 +13,9 @@
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
-      <module name="gmall-logger" target="1.8" />
-      <module name="gmall-realtime" target="8" />
-      <module name="gmall-suger" target="1.8" />
+      <module name="gmall-logger" target="1.5" />
+      <module name="gmall-realtime" target="1.5" />
+      <module name="gmall-suger" target="1.5" />
       <module name="gmall2021-parent" target="1.5" />
     </bytecodeTargetLevel>
   </component>
